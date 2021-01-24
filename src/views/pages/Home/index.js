@@ -4,16 +4,10 @@ import { summaryDonations } from '../../../utils/helpers';
 import { getCharities, getPayments } from '../../../services/api';
 import { UPDATE_TOTAL_DONATE } from '../../../store/actionTypes';
 import Card from '../../../components/Card';
-
-export const style = {
-  color: 'red',
-  margin: '1em 0',
-  fontWeight: 'bold',
-  fontSize: '16px',
-  textAlign: 'center',
-};
+import { useStyles } from './styles';
 
 const Home = (props) => {
+  const classes = useStyles();
   const donate = props.donate;
   const message = props.message;
 
@@ -39,11 +33,13 @@ const Home = (props) => {
   ));
 
   return (
-    <div>
-      <h1>Tamboon React</h1>
-      <p>All donations: {donate}</p>
-      <p style={style}>{message}</p>
-      {cards}
+    <div className={classes.homePage}>
+      <h1 style={{textAlign: 'center'}}>Tamboon React</h1>
+      <p style={{textAlign: 'center'}}>All donations: {donate}</p>
+      <p className={classes.message}>{message}</p>
+      <div className={classes.cardRow}>
+        {cards}
+      </div>
     </div>
   );
 }

@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import { handlePay } from '../../services/api';
-import { buttonStyle, cardStyle } from './styles';
+import { useStyles } from './styles';
 
 const Card = ({ charity }) => {
+
+  const classes = useStyles();
+
   const [state, setState] = useState({
     selectedAmount: 10,
     showOverlay: false,
@@ -12,11 +15,11 @@ const Card = ({ charity }) => {
     <label key={`label-${j}`}>
       <input
         type="radio"
-        name="payment"
-        onChange={() => {
-          setState({ selectedAmount: amount });
-        }}
+        name={`payment-${charity.id}`}
         checked={state.selectedAmount === amount}
+        onChange={() => {
+          setState({ ...state, selectedAmount: amount });
+        }}
       />
       {amount}
     </label>
@@ -31,18 +34,22 @@ const Card = ({ charity }) => {
   }
 
   return (
-    <div style={cardStyle}>
-      <p>{charity.name}</p>
+    <div className={classes.card}>
+      <div className={classes.imageDiv}>
+        <img className={classes.image} src={`/images/${charity.image}`}/>
+      </div>
+      <div className={classes.cardDesc}>
+        <p>{charity.name}</p>
+        <button className={classes.button} onClick={() => setState({showOverlay: !state.showOverlay})}>Donate</button>
+      </div>
       {
-        state.showOverlay ? <>
-          {payments}
-          <button
-            style={buttonStyle}
-            onClick={makePayment}
-          >
+        state.showOverlay ? <div className={classes.overlay}>
+          <span className={classes.closeOverlay} onClick={() => setState({showOverlay: !state.showOverlay})}>X</span>
+          <div className={classes.payments}>{payments}</div>
+          <button className={classes.button} onClick={makePayment}>
             Pay
           </button>
-        </>
+        </div>
         : null
       }
     </div>
