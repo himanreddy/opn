@@ -9,10 +9,6 @@ export const useStyles = createUseStyles({
     // border: '1px solid #ccc',
     boxShadow: '0px 3px 10px 2px gainsboro',
     width: '48%',
-
-    '@media (minWidth: 1024px)': {
-      width: '100%',
-    },
   },
 
   cardDesc: {
@@ -66,6 +62,15 @@ export const useStyles = createUseStyles({
     top: '10px',
     right: '10px',
     cursor: 'pointer',
+  },
+
+  '@media screen and (max-width: 992px)': {
+    card: {
+      width: '100%',
+    },
+    imageDiv: {
+      height: '200px',
+    },
   },
   
 });
