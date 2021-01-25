@@ -41,6 +41,7 @@ export const useStyles = createUseStyles({
     background: 'transparent',
     padding: '0.5em',
     borderRadius: '5px',
+    cursor: 'pointer',
   },
 
   overlay: {

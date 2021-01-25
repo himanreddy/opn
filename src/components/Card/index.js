@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
+import { connect } from 'react-redux';
 import { handlePay } from '../../services/api';
+import { UPDATE_MESSAGE, UPDATE_TOTAL_DONATE } from '../../store/actionTypes';
+import { convertUSDToTHB } from '../../utils/helpers';
 import { useStyles } from './styles';
 
-const Card = ({ charity }) => {
+const Card = ({ charity, dispatch }) => {
 
   const classes = useStyles();
 
@@ -26,11 +29,24 @@ const Card = ({ charity }) => {
   ));
 
   const makePayment = () => {
-    handlePay(
-      charity.id,
-      state.selectedAmount,
-      charity.currency
-    )
+    handlePay({
+      charitiesId: charity.id,
+      amount: convertUSDToTHB(state.selectedAmount),
+      currency: charity.currency,
+    }).then((res) => {
+      dispatch({
+        type: UPDATE_TOTAL_DONATE,
+        amount: convertUSDToTHB(state.selectedAmount),
+      });
+      dispatch({
+        type: UPDATE_MESSAGE,
+        message: `Thank you for your donation of ${charity.currency} ${convertUSDToTHB(state.selectedAmount)}`,
+      });
+      setState({
+        selectedAmount: 10,
+        showOverlay: false,
+      });
+    })
   }
 
   return (
@@ -45,6 +61,7 @@ const Card = ({ charity }) => {
       {
         state.showOverlay ? <div className={classes.overlay}>
           <span className={classes.closeOverlay} onClick={() => setState({showOverlay: !state.showOverlay})}>X</span>
+          <p><strong>Select the amount to donate (USD)</strong></p>
           <div className={classes.payments}>{payments}</div>
           <button className={classes.button} onClick={makePayment}>
             Pay
@@ -57,4 +74,4 @@ const Card = ({ charity }) => {
 
 }
 
-export default Card;
+export default connect((state) => state)(Card);
